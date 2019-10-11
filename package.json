@@ -1,0 +1,23 @@
+{
+  "name": "freethrow",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/satoyuichi/FreeThrow.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/satoyuichi/FreeThrow/issues"
+  },
+  "homepage": "https://github.com/satoyuichi/FreeThrow#readme",
+  "dependencies": {
+    "matter-js": "^0.14.2",
+    "matter-tools": "^0.11.1"
+  }
+}
