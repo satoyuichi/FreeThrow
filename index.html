@@ -2,74 +2,170 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8"/>
+	<link rel="stylesheet" href="./main.css">
         <title>Document</title>
     </head>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/r16/Stats.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.14.2/matter.js"></script>
+    
     <body></body>
     <script>
+     const STATE_IDLE = 0;
+     const STATE_SET_DIRECTION = STATE_IDLE + 1;
+     const STATE_SET_POWER = STATE_SET_DIRECTION + 1;
+     const STATE_SHOOT = STATE_SET_POWER + 1;
+     const STATE_DROP = STATE_SHOOT + 1;
+     const STATE_END = STATE_DROP + 1;
+
+     let gameState = STATE_IDLE;
+
      var gui = new dat.GUI();
-     var stats = new Stats();
-     document.body.appendChild( stats.domElement );
+     /* var stats = new Stats();
+      * document.body.appendChild( stats.domElement ); */
 
-     // module aliases
-     var Engine = Matter.Engine,
-	 Render = Matter.Render,
-	 World = Matter.World,
-	 Bodies = Matter.Bodies;
+     window.onload = function () {
+	 // module aliases
+	 var Engine = Matter.Engine,
+	     Render = Matter.Render,
+	     World = Matter.World,
+	     Bodies = Matter.Bodies;
 
-     // create an engine
-     var engine = Engine.create();
+	 // create an engine
+	 var engine = Engine.create();
 
-     // create a renderer
-     var render = Render.create({
-	 element: document.body,
-	 engine: engine
-     });
+	 // create a renderer
+	 var render = Render.create({
+	     element: document.body,
+	     engine: engine
+	 });
 
-     const STAGE_WIDTH = 810;
-     const STAGE_HEIGHT = 610;
-     const WALL_THICKNESS = 20;
-     
-     // create two boxes and a ground
-     var ball = Bodies.circle(400, 200, 15);
-     var wallLeft = Bodies.rectangle(0, STAGE_HEIGHT / 2, WALL_THICKNESS, STAGE_HEIGHT, { isStatic: true });
-     var wallRight = Bodies.rectangle(STAGE_WIDTH - WALL_THICKNESS / 2, STAGE_HEIGHT / 2, WALL_THICKNESS, STAGE_HEIGHT, { isStatic: true });
-     var wallTop = Bodies.rectangle(STAGE_WIDTH / 2, 0, STAGE_WIDTH, WALL_THICKNESS, { isStatic: true });
-     var ground = Bodies.rectangle(400, 610, STAGE_WIDTH, WALL_THICKNESS, { isStatic: true });
+	 const STAGE_WIDTH = 810;
+	 const STAGE_HEIGHT = 480;
+	 const WALL_THICKNESS = 20;
+	 
+	 // create two boxes and a ground
+	 var ball = Bodies.circle(400, STAGE_HEIGHT - 15, 15, { restitution: 0.95, mass: 1.0, friction: 0.02 });
+	 var wallLeft = Bodies.rectangle(0, STAGE_HEIGHT / 2, WALL_THICKNESS, STAGE_HEIGHT, { isStatic: true });
+	 var wallRight = Bodies.rectangle(STAGE_WIDTH - WALL_THICKNESS / 2, STAGE_HEIGHT / 2, WALL_THICKNESS, STAGE_HEIGHT, { isStatic: true });
+	 var wallTop = Bodies.rectangle(STAGE_WIDTH / 2, 0, STAGE_WIDTH, WALL_THICKNESS, { isStatic: true });
+	 var ground = Bodies.rectangle(STAGE_WIDTH / 2, STAGE_HEIGHT, STAGE_WIDTH, WALL_THICKNESS, { isStatic: true });
 
-     const BASKET_BASE_X = STAGE_WIDTH - 100;
-     const BASKET_BASE_Y = STAGE_HEIGHT - 300;
-     const BASKET_THICKNESS = 10;
-     const BASKET_WIDTH = 50;
-     const BASKET_HEIGHT = 50;
+	 const BASKET_BASE_X = STAGE_WIDTH - 130;
+	 const BASKET_BASE_Y = STAGE_HEIGHT - 200;
+	 const BASKET_THICKNESS = 10;
+	 const BASKET_WIDTH = 60;
+	 const BASKET_HEIGHT = 60;
 
-     var basketLeft = Bodies.rectangle(BASKET_BASE_X, BASKET_BASE_Y, BASKET_THICKNESS, BASKET_HEIGHT,  { isStatic: true });
-     var basketBottom = Bodies.rectangle(BASKET_BASE_X + BASKET_WIDTH / 2, BASKET_BASE_Y + BASKET_HEIGHT / 2, BASKET_WIDTH, BASKET_THICKNESS, { isStatic: true });
-     var basketRight = Bodies.rectangle(BASKET_BASE_X + BASKET_WIDTH, BASKET_BASE_Y, BASKET_THICKNESS, BASKET_HEIGHT,  { isStatic: true });
-     
-     // add all of the bodies to the world
-     World.add(engine.world, [ball, wallLeft, wallRight, wallTop, ground, basketLeft, basketBottom, basketRight]);
+	 var basketLeft = Bodies.rectangle(BASKET_BASE_X, BASKET_BASE_Y, BASKET_THICKNESS, BASKET_HEIGHT,  { isStatic: true });
+	 var basketBottom = Bodies.rectangle(BASKET_BASE_X + BASKET_WIDTH / 2, BASKET_BASE_Y + BASKET_HEIGHT / 2, BASKET_WIDTH, BASKET_THICKNESS, { isStatic: true });
+	 var basketRight = Bodies.rectangle(BASKET_BASE_X + BASKET_WIDTH, BASKET_BASE_Y, BASKET_THICKNESS, BASKET_HEIGHT,  { isStatic: true });
+	 
+	 // add all of the bodies to the world
+	 World.add(engine.world, [ball, wallLeft, wallRight, wallTop, ground, basketLeft, basketBottom, basketRight]);
 
-     // run the engine
-     Engine.run(engine);
+	 // run the engine
+	 Engine.run(engine);
 
-     // run the renderer
-     Render.run(render);
+	 // run the renderer
+	 Render.run(render);
 
-     function animate() {
 
-	 stats.begin();
+	 let directionContext = document.getElementById ("canvas_direction").getContext('2d');
 
-	 // monitored code goes here
+	 directionContext.fillStyle = 'white';
+	 directionContext.lineWidth = 2.0;
 
-	 stats.end();
+	 let degree = 0.0;
+	 let addDirectionVal = 1.0;
+
+	 function setDirection () {
+	     directionContext.fillRect(0, 0, 91, 91);
+	     directionContext.beginPath();
+	     directionContext.moveTo (0, 89);
+	     directionContext.lineTo (Math.cos(degree * Math.PI / 180.0) * 89.0, Math.sin(degree * Math.PI / 180.0) * -89.0 + 89);
+	     directionContext.stroke ();
+	     directionContext.closePath();
+
+	     degree = degree + addDirectionVal;
+	     if ((degree >= 90.0) || (degree < 0.0)) {
+		 addDirectionVal = -addDirectionVal;
+	     }
+	 }
+
+	 let powerContext = document.getElementById ("canvas_power").getContext('2d');
+
+	 let power = 0.0;
+	 let addPowerVal = 1.5;
+
+	 function setPower () {
+	     powerContext.fillStyle = 'white';
+	     powerContext.fillRect(0, 0, 233, 34);
+
+	     powerContext.fillStyle = 'orange';
+	     powerContext.fillRect(0, 0, power, 34);
+
+	     power = power + addPowerVal;
+	     if ((power >= 233.0) || (power < 0.0)) {
+		 addPowerVal = -addPowerVal;
+	     }
+	 }
+
+	 function shoot () {
+	     let powerX = Math.cos(degree * Math.PI / 180.0) * power * 0.1;
+	     let powerY = Math.sin(degree * Math.PI / 180.0) * power * -0.1;
+	     let velocity = Matter.Vector.create(powerX, powerY);
+	     Matter.Body.setVelocity (ball, velocity);
+
+	     gameState++;
+	 }
+	 
+	 function animate() {
+
+	     /* stats.begin();
+
+		// monitored code goes here
+
+		stats.end(); */
+
+	     switch (gameState) {
+		 case STATE_IDLE:
+		     break;
+		 case STATE_SET_DIRECTION:
+		     setDirection ();
+		     break;
+		 case STATE_SET_POWER:
+		     setPower ();
+		     break;
+		 case STATE_SHOOT:
+		     shoot ();
+		     break;
+		 case STATE_DROP:
+		     break;
+		 case STATE_END:
+		     break;
+	     }
+
+	     requestAnimationFrame( animate );
+	 }
 
 	 requestAnimationFrame( animate );
-
      }
 
-     requestAnimationFrame( animate );
+     function onButtonClick () {
+	 console.log ("onButtonClick");
+	 gameState++;
+     }
+     
     </script>
+    <div id="interface">
+	<div id="button" onmouseup="onButtonClick()"></div>
+	<div id="direction">
+	    <canvas id="canvas_direction"></canvas>
+	</div>
+	<div id="power">
+	    <canvas id="canvas_power"></canvas>
+	</div>
+	<div id="score">99</div>
+    </div>
 </html>

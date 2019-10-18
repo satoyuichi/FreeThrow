@@ -1,0 +1,41 @@
+#interface {
+    width: auto;
+    height: 89px;    
+}
+
+#button {
+    position: relative;
+    background-color: red;
+    left: 34px;
+    top: 0px;
+    width: 89px;
+    height: 89px;
+    float: left;
+    border-radius: 50% 50%;
+}
+
+#direction {
+    position: relative;
+    top: 0px;
+    left: 55px;
+    width: 89px;
+    height: 89px;
+    float: left;
+}
+
+#power {
+    position: relative;
+    background-color: aqua;
+    top: 0px;
+    left: 68px;
+    width: 233px;
+    height: 34px;
+    float: left;
+}
+
+#score {
+    position: relative;
+    top: 0px;
+    left: 144px;
+    font-size: xx-large;
+}
