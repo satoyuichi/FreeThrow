@@ -1,41 +1,62 @@
 #interface {
+    position: relative;
     width: auto;
-    height: 89px;    
+    height: 89px;
+    margin: 8px;
 }
 
 #button {
-    position: relative;
-    background-color: red;
-    left: 34px;
+    position: absolute;
+    left: 13px;
     top: 0px;
     width: 89px;
     height: 89px;
     float: left;
     border-radius: 50% 50%;
+    text-align: center;
+    background: radial-gradient(#ff9610, #f33a1cd9, transparent);
+    font-weight: bold;
+}
+
+#button span {
+    text-shadow: 4px 4px 3px #333;
+    font-size: x-large;
+    line-height: 89px;
 }
 
 #direction {
-    position: relative;
+    position: absolute;
     top: 0px;
-    left: 55px;
+    left: 110px;
     width: 89px;
     height: 89px;
     float: left;
 }
 
+#canvas_direction {
+    border: solid;
+}
+
 #power {
-    position: relative;
-    background-color: aqua;
+    position: absolute;
     top: 0px;
-    left: 68px;
+    left: 220px;
     width: 233px;
     height: 34px;
     float: left;
 }
 
+#canvas_power {
+    //   position: absolute;
+    border: solid;
+    width: 233px;
+    height: 34px;
+    border-radius: 5px;
+}
+
 #score {
-    position: relative;
+    position: absolute;
     top: 0px;
-    left: 144px;
+    left: 521px;
     font-size: xx-large;
 }
