@@ -33,6 +33,7 @@
 
      let gameState = STATE_IDLE;
      let gameScore = 0;
+     let throwCount = 1;
      let point = 0;
 
      window.onload = function () {
@@ -163,10 +164,19 @@
 		     gameState = STATE_TURN_END;
 		     break;
 		 case STATE_TURN_END:
-		     document.getElementById ('score').textContent = gameScore;
-		     gameState = STATE_IDLE;
+		     throwCount++;
+		     if (throwCount == 11) {
+			 gameState = STATE_GAME_END;
+		     }
+		     else {
+			 document.getElementById ('score').textContent = `${throwCount} / 10  Score: ${gameScore}`;
+			 gameState = STATE_IDLE;
+		     }
 		     break;
 		 case STATE_GAME_END:
+		     throwCount = 1;
+		     gameScore = 0;
+		     document.getElementById ('score').textContent = `${throwCount} / 10  Score: ${gameScore}`;
 		     gameState = STATE_IDLE;
 		     break;
 	     }
@@ -192,7 +202,7 @@
 	    <canvas id="canvas_power" width="233px" height="34px"></canvas>
 	</div>
 	<div id="score">
-	    0
+	    1 / 10  Score: 0
 	</div>
     </div>
 </html>
