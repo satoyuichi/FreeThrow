@@ -28,6 +28,7 @@
      const BASKET_WIDTH = 70;
      const BASKET_HEIGHT = 60;
 
+     const POWER_OFFSET = 21;
      const POWER_MIN = 0;
      const POWER_MAX = 233;
 
@@ -117,10 +118,12 @@
 	     point = 3;
 	     Events.on(engine, 'collisionStart', function (event) {
 		 if (event.pairs[0].bodyB.id == "basketBottom") {
-		     Events.off (engine, 'collisionStart');
+		     if (event.pairs[0].bodyA.position.y < (BASKET_BASE_Y + BASKET_HEIGHT / 2)) {
+			 Events.off (engine, 'collisionStart');
 
-		     gameScore += point;
-		     gameState = STATE_TURN_END;
+			 gameScore += point;
+			 gameState = STATE_TURN_END;
+		     }
 		 }
 		 else if (event.pairs[0].bodyB.id == "ground") {
 		     Events.off (engine, 'collisionStart');
@@ -132,8 +135,8 @@
 		 }
 	     });
 
-	     let powerX = Math.cos (degree * Math.PI / 180.0) * power * 0.1;
-	     let powerY = Math.sin (degree * Math.PI / 180.0) * power * -0.1;
+	     let powerX = Math.cos (degree * Math.PI / 180.0) * (power + POWER_OFFSET) * 0.1;
+	     let powerY = Math.sin (degree * Math.PI / 180.0) * (power + POWER_OFFSET) * -0.1;
 	     let velocity = Matter.Vector.create (powerX, powerY);
 	     Matter.Body.setVelocity (ball, velocity);
 
@@ -165,7 +168,7 @@
 		     break;
 		 case STATE_TURN_END:
 		     throwCount++;
-		     if (throwCount == 11) {
+		     if (throwCount >= 11) {
 			 gameState = STATE_GAME_END;
 		     }
 		     else {
