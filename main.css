@@ -19,7 +19,7 @@
 }
 
 #button span {
-    text-shadow: 4px 4px 3px #333;
+    text-shadow: 4px 4px 3px #777;
     font-size: x-large;
     line-height: 89px;
 }
@@ -59,4 +59,5 @@
     top: 0px;
     left: 521px;
     font-size: xx-large;
+    text-shadow: 4px 4px 3px #BBB;
 }
