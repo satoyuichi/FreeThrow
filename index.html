@@ -174,10 +174,6 @@
 		     }
 		     break;
 		 case STATE_GAME_END:
-		     throwCount = 1;
-		     gameScore = 0;
-		     document.getElementById ('score').textContent = `${throwCount} / 10  Score: ${gameScore}`;
-		     gameState = STATE_IDLE;
 		     break;
 	     }
 
@@ -188,7 +184,16 @@
      }
 
      function onButtonClick () {
-	 gameState++;
+	 if (gameState == STATE_GAME_END) {
+	     throwCount = 1;
+	     gameScore = 0;
+	     document.getElementById ('score').textContent = `${throwCount} / 10  Score: ${gameScore}`;
+
+	     gameState = STATE_IDLE;
+	 }
+	 else {
+	     gameState++;
+	 }
      }
     </script>
     <div id="interface">
