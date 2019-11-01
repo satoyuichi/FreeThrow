@@ -1,8 +1,9 @@
 #interface {
     position: relative;
     width: auto;
-    height: 89px;
+    height: 55px;
     margin: 8px;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
 #button {
