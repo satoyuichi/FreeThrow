@@ -7,7 +7,25 @@
     </head>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.14.2/matter.js"></script>
     
-    <body></body>
+    <body>
+	<content>
+	    <div id="canvas_region"></div>
+	    <div id="interface">
+		<div id="button" onmouseup="onButtonClick ()">
+		    <span>Shoot!</span>
+		</div>
+		<div id="direction">
+		    <canvas id="canvas_direction" width="55px" height="55px"></canvas>
+		</div>
+		<div id="power">
+		    <canvas id="canvas_power" width="233px" height="34px"></canvas>
+		</div>
+		<div id="score">
+		    1 / 10  Score: 0
+		</div>
+	    </div>
+	</content>
+    </body>
     <script>
      const STATE_IDLE = 0;
      const STATE_SET_DIRECTION = STATE_IDLE + 1;
@@ -51,10 +69,14 @@
 	 let engine = Engine.create ();
 
 	 // create a renderer
+	 let canvasRegion = document.getElementById('canvas_region');
 	 let render = Render.create ({
-	     element: document.body,
+	     element: canvasRegion,
 	     engine: engine
 	 });
+	 let canvas = document.querySelector ('#canvas_region canvas');
+	 canvas.setAttribute ('height', '500');
+	 canvas.style.width = '60%';
 
 	 let ball = Bodies.circle (400, STAGE_HEIGHT - 15, 15, { id: 'ball', restitution: 0.95, mass: 1.0, friction: 0.02 });
 	 let wallLeft = Bodies.rectangle (0, STAGE_HEIGHT / 2, WALL_THICKNESS, STAGE_HEIGHT, { isStatic: true });
@@ -87,8 +109,8 @@
 	     directionContext.lineWidth = 2.0;
 	     directionContext.fillRect (0, 0, 91, 91);
 	     directionContext.beginPath ();
-	     directionContext.moveTo (0, 89);
-	     directionContext.lineTo (Math.cos (degree * Math.PI / 180.0) * 89.0, Math.sin (degree * Math.PI / 180.0) * -89.0 + 89);
+	     directionContext.moveTo (0, 55);
+	     directionContext.lineTo (Math.cos (degree * Math.PI / 180.0) * 55.0, Math.sin (degree * Math.PI / 180.0) * -55.0 + 55);
 	     directionContext.stroke ();
 	     directionContext.closePath ();
 
@@ -199,18 +221,4 @@
 	 }
      }
     </script>
-    <div id="interface">
-	<div id="button" onmouseup="onButtonClick ()">
-	    <span>Shoot!</span>
-	</div>
-	<div id="direction">
-	    <canvas id="canvas_direction" width="89px" height="89px"></canvas>
-	</div>
-	<div id="power">
-	    <canvas id="canvas_power" width="233px" height="34px"></canvas>
-	</div>
-	<div id="score">
-	    1 / 10  Score: 0
-	</div>
-    </div>
 </html>

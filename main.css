@@ -9,27 +9,27 @@
     position: absolute;
     left: 13px;
     top: 0px;
-    width: 89px;
-    height: 89px;
+    width: 55px;
+    height: 55px;
     float: left;
     border-radius: 50% 50%;
     text-align: center;
     background: radial-gradient(#ff9610, #f33a1cd9, transparent);
-    font-weight: bold;
 }
 
 #button span {
     text-shadow: 4px 4px 3px #777;
-    font-size: x-large;
-    line-height: 89px;
+    font-size: medium;
+    line-height: 55px;
+    font-weight: bold;
 }
 
 #direction {
     position: absolute;
     top: 0px;
-    left: 110px;
-    width: 89px;
-    height: 89px;
+    left: 102px;
+    width: 55px;
+    height: 55px;
     float: left;
 }
 
@@ -40,7 +40,7 @@
 #power {
     position: absolute;
     top: 0px;
-    left: 220px;
+    left: 178px;
     width: 233px;
     height: 34px;
     float: left;
@@ -57,7 +57,7 @@
 #score {
     position: absolute;
     top: 0px;
-    left: 521px;
-    font-size: xx-large;
+    left: 450px;
+    font-size: x-large;
     text-shadow: 4px 4px 3px #BBB;
 }
